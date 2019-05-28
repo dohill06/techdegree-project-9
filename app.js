@@ -14,6 +14,19 @@ const app = express();
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 
+// JSON parsing
+app.use(express.json());
+
+// test the database connection
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully.');
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
+
 // TODO setup your api routes here
 
 // setup a friendly greeting for the root route
@@ -43,9 +56,12 @@ app.use((err, req, res, next) => {
 });
 
 // set our port
-app.set('port', process.env.PORT || 5000);
+const port = process.env.PORT || 5000;
 
 // start listening on our port
-const server = app.listen(app.get('port'), () => {
-  console.log(`Express server is listening on port ${server.address().port}`);
+sequelize.sync().then(() => {
+  app.listen(port, () => {
+    console.log(`Express server is listening on port ${port}`);
+  });
 });
+
