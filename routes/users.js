@@ -14,6 +14,10 @@ router.get('/', authenticateUser, (req, res) => {
     res.status(200);
 });
 
+router.post('/', (req, res, next) => {
+    
+});
+
 
 
 module.exports = router;
