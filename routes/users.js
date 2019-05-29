@@ -17,33 +17,39 @@ router.get('/', authenticateUser, (req, res) => {
 router.post('/', (req, res, next) => {
     const user = req.body;
 
-    User.findOne({
-            where: {
-                emailAddress: user.emailAddress
-            }
-        })
-        .then(email => {
-            if (email) {
-                const err = new Error('Duplicate email');
-                err.status = 400;
-                next(err);
-            } else {
-                user.password = bcryptjs.hashSync(user.password);
-                User.create(user).then(() => {
-                    res.location('/');
-                    res.status(201).end();
-                }).catch(err => {
-                    if (err.name === 'SequelizeValidationError') {
-                        err.message = err.errors;
-                        err.status = 400;
-                        next(err);
-                    } else {
-                        err.message = 'Server Error';
-                        next(err);
-                    }
-                });
-            }
-        });
+    if (!user.emailAddress) {
+        const err = new Error('Valid email address is required');
+        err.status = 400;
+        next(err);
+    } else {
+        User.findOne({
+                where: {
+                    emailAddress: user.emailAddress
+                }
+            })
+            .then(email => {
+                if (email) {
+                    const err = new Error('Duplicate email');
+                    err.status = 400;
+                    next(err);
+                } else {
+                    user.password = bcryptjs.hashSync(user.password);
+                    User.create(user).then(() => {
+                        res.location('/');
+                        res.status(201).end();
+                    }).catch(err => {
+                        if (err.name === 'SequelizeValidationError') {
+                            err.message = 'All fields required';
+                            err.status = 400;
+                            next(err);
+                        } else {
+                            err.message = 'Server Error';
+                            next(err);
+                        }
+                    });
+                }
+            });
+    }
 });
 
 
