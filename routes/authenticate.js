@@ -4,7 +4,7 @@ const User = require('../models').User;
 
 
 module.exports = (req, res, next) => {
-    let message = null;
+
     const credentials = auth(req);
 
     if (credentials) {
@@ -13,28 +13,27 @@ module.exports = (req, res, next) => {
                     emailAddress: credentials.name
                 }
             })
-            .then(user => {
+            .then(function (user) {
                 if (user) {
                     const authenticated = bcryptjs
                         .compareSync(credentials.pass, user.password);
                     if (authenticated) {
                         req.currentUser = user;
+                        next();
                     } else {
-                        message = 'Authentication Failure';
+                        const err = new Error('Authentication Failure');
+                        err.status = 401;
+                        next(err);
                     }
                 } else {
-                    message = 'User Not Found';
+                    const err = new Error('User Not Found');
+                    err.status = 401;
+                    next(err);
                 }
             });
     } else {
-        message = 'Please Log In';
-    }
-
-    if (message) {
-        const err = new Error(message);
+        const err = new Error('Please Log In');
         err.status = 401;
         next(err);
-    } else {
-        next();
     }
 };
