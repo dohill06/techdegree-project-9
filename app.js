@@ -28,10 +28,12 @@ sequelize
   });
 
 // require routes
-const routes = require('./routes');
+const homeRoutes = require('./routes');
+const userRoutes = require('./routes/users');
 
 // TODO setup your api routes here
-app.use(routes);
+app.use(homeRoutes);
+app.use('api/users', userRoutes);
 
 
 // send 404 if no other route matched
