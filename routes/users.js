@@ -5,7 +5,13 @@ const authenticateUser = require('./authenticate');
 const bcryptjs = require('bcryptjs');
 
 router.get('/', authenticateUser, (req, res) => {
-
+    res.json({
+        id: req.currentUser.id,
+        firstName: req.currentUser.firstName,
+        lastName: req.currentUser.lastName,
+        emailAddress: req.currentUser.emailAddress
+    });
+    res.status(200);
 });
 
 
