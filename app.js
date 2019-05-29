@@ -27,14 +27,12 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-// TODO setup your api routes here
+// require routes
+const routes = require('./routes');
 
-// setup a friendly greeting for the root route
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Welcome to the REST API project!',
-  });
-});
+// TODO setup your api routes here
+app.use(routes);
+
 
 // send 404 if no other route matched
 app.use((req, res) => {
