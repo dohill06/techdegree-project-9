@@ -19,13 +19,13 @@ app.use(express.json());
 
 // test the database connection
 sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
+	.authenticate()
+	.then(() => {
+		console.log('Connection has been established successfully.');
+	})
+	.catch(err => {
+		console.error('Unable to connect to the database:', err);
+	});
 
 // require routes
 const homeRoutes = require('./routes');
@@ -38,21 +38,21 @@ app.use('api/users', userRoutes);
 
 // send 404 if no other route matched
 app.use((req, res) => {
-  res.status(404).json({
-    message: 'Route Not Found',
-  });
+	res.status(404).json({
+		message: 'Route Not Found',
+	});
 });
 
 // setup a global error handler
 app.use((err, req, res, next) => {
-  if (enableGlobalErrorLogging) {
-    console.error(`Global error handler: ${JSON.stringify(err.stack)}`);
-  }
+	if (enableGlobalErrorLogging) {
+		console.error(`Global error handler: ${JSON.stringify(err.stack)}`);
+	}
 
-  res.status(err.status || 500).json({
-    message: err.message,
-    error: {},
-  });
+	res.status(err.status || 500).json({
+		message: err.message,
+		error: {},
+	});
 });
 
 // set our port
@@ -60,8 +60,7 @@ const port = process.env.PORT || 5000;
 
 // start listening on our port
 sequelize.sync().then(() => {
-  app.listen(port, () => {
-    console.log(`Express server is listening on port ${port}`);
-  });
+	app.listen(port, () => {
+		console.log(`Express server is listening on port ${port}`);
+	});
 });
-
