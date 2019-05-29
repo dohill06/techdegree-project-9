@@ -30,11 +30,12 @@ sequelize
 // require routes
 const homeRoutes = require('./routes');
 const userRoutes = require('./routes/users');
+const courseRoutes = require('./routes/courses');
 
 // TODO setup your api routes here
 app.use(homeRoutes);
-app.use('api/users', userRoutes);
-
+app.use('/api/users', userRoutes);
+app.use('/api/courses', courseRoutes);
 
 // send 404 if no other route matched
 app.use((req, res) => {
