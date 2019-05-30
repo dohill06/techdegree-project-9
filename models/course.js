@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         title: {
             type: DataTypes.STRING,
+            allowNull: false,
             validate: {
                 notEmpty: {
                     msg: 'Course title required'
@@ -16,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         description: {
             type: DataTypes.TEXT,
+            allowNull: false,
             validate: {
                 notEmpty: {
                     msg: 'Description required'

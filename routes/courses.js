@@ -96,7 +96,7 @@ router.post('/', authenticateUser, (req, res, next) => {
                         res.status(201).end();
                     }).catch(err => {
                         if (err.name === 'SequelizeValidationError') {
-                            err.message = err.message.slice(18, 40);
+                            err.message = err.message;
                             err.status = 400;
                             next(err);
                         } else {
@@ -111,8 +111,37 @@ router.post('/', authenticateUser, (req, res, next) => {
     }
 });
 
-router.put('/:id', (req, res, next) => {
+router.put('/:id', authenticateUser, (req, res, next) => {
+    const input = req.body;
 
+    Course.findOne({
+        where: {
+            id: input.id
+        }
+    }).then(course => {
+        if (!course) {
+            const err = new Error('Sorry, no id found');
+            err.status = 404;
+            next(err);
+        } else if (course.userId !== req.currentUser.id) {
+            const err = new Error('User can only update their own courses');
+            err.status = 403;
+            next(err);
+        } else {
+            course.update(input);
+        }
+    }).then(() => {
+        res.status(204).end();
+    }).catch(err => {
+        if (err.name === 'SequelizeValidationError') {
+            err.message = err.message;
+            err.status = 400;
+            next(err);
+        } else {
+            err.message = 'Server Error';
+            next(err);
+        }
+    });
 });
 
 router.delete('/:id', (req, res, next) => {

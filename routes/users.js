@@ -41,7 +41,7 @@ router.post('/', (req, res, next) => {
                         res.status(201).end();
                     }).catch(err => {
                         if (err.name === 'SequelizeValidationError') {
-                            err.message = err.message.slice(18, 40);
+                            err.message = err.message;
                             err.status = 400;
                             next(err);
                         } else {
