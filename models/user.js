@@ -30,10 +30,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: 'Valid email is required'
+                    msg: 'Valid email required'
                 },
                 isEmail: {
-                    msg: 'Valid email is required'
+                    msg: 'Valid email required'
                 }
             }
         },
