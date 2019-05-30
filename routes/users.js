@@ -35,13 +35,13 @@ router.post('/', (req, res, next) => {
                 } else {
                     if (user.password) {
                         user.password = bcryptjs.hashSync(user.password);
-                    }                    
+                    }
                     User.create(user).then(() => {
                         res.location('/');
                         res.status(201).end();
                     }).catch(err => {
                         if (err.name === 'SequelizeValidationError') {
-                            err.message = err.message.slice(18,40);
+                            err.message = err.message.slice(18, 40);
                             err.status = 400;
                             next(err);
                         } else {
@@ -50,6 +50,8 @@ router.post('/', (req, res, next) => {
                         }
                     });
                 }
+            }).catch(err => {
+                next(err);
             });
     }
 });

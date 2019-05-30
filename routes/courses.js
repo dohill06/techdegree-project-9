@@ -70,8 +70,45 @@ router.get('/:id', (req, res, next) => {
     });
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', authenticateUser, (req, res, next) => {
+    const input = req.body;
 
+    if (!input.title) {
+        const err = new Error('All fields are required');
+        err.status = 400;
+        next(err);
+    } else {
+        Course.findOne({
+            where: {
+                title: input.title
+            }
+        }).then(course => {
+            if (course) {
+                const err = new Error('Duplicate course');
+                err.status = 400;
+                next(err);
+            } else {
+                input.userId = req.currentUser.id;
+
+                Course.create(input)
+                    .then(course => {
+                        res.location(`/api/courses/${course.id}`);
+                        res.status(201).end();
+                    }).catch(err => {
+                        if (err.name === 'SequelizeValidationError') {
+                            err.message = err.message.slice(18, 40);
+                            err.status = 400;
+                            next(err);
+                        } else {
+                            err.message = 'Server Error';
+                            next(err);
+                        }
+                    });
+            }
+        }).catch(err => {
+            next(err);
+        });
+    }
 });
 
 router.put('/:id', (req, res, next) => {
