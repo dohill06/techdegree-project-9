@@ -18,7 +18,7 @@ router.post('/', (req, res, next) => {
     const user = req.body;
 
     if (!user.emailAddress) {
-        const err = new Error('Valid email address is required');
+        const err = new Error('All fields are required');
         err.status = 400;
         next(err);
     } else {
