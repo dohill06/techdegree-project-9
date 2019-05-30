@@ -153,8 +153,33 @@ router.put('/:id', authenticateUser, (req, res, next) => {
     }
 });
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', authenticateUser, (req, res, next) => {
+    const input = req.body;
 
+    Course.findOne({
+        where: {
+            id: input.id
+        }
+    }).then(course => {
+        if (course.userId !== req.currentUser.id) {
+            const err = new Error('User can only delete their own courses');
+            err.status = 403;
+            next(err);
+        } else if (!course) {
+            const err = new Error('Sorry, no id found');
+            err.status = 404;
+            next(err);
+        } else {
+            course.destroy()
+                .then(() => {
+                    res.status(204).end();
+                }).catch(err => {
+                    next(err);
+                });
+        }
+    }).catch(err => {
+        next(err);
+    });
 });
 
 module.exports = router;
