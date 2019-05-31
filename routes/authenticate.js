@@ -2,7 +2,7 @@ const bcryptjs = require('bcryptjs');
 const auth = require('basic-auth');
 const User = require('../models').User;
 
-
+// Set up authentication with email and password
 module.exports = (req, res, next) => {
 
     const credentials = auth(req);
