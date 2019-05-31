@@ -4,7 +4,7 @@ const Course = require('../models').Course;
 const User = require('../models').User;
 const authenticateUser = require('./authenticate');
 
-
+// Get courses and exclude certain properties
 router.get('/', (req, res, next) => {
     Course.findAll({
         attributes: {
@@ -32,7 +32,7 @@ router.get('/', (req, res, next) => {
         next(err);
     });
 });
-
+// Get one course by id and exclude certain properties
 router.get('/:id', (req, res, next) => {
     Course.findOne({
         where: {
@@ -69,7 +69,7 @@ router.get('/:id', (req, res, next) => {
         next(err);
     });
 });
-
+// Create course with authentication and validate fields
 router.post('/', authenticateUser, (req, res, next) => {
     const input = req.body;
 
@@ -110,7 +110,7 @@ router.post('/', authenticateUser, (req, res, next) => {
         });
     }
 });
-
+// Update course with authentication and validate fields
 router.put('/:id', authenticateUser, (req, res, next) => {
     const input = req.body;
 
@@ -152,7 +152,7 @@ router.put('/:id', authenticateUser, (req, res, next) => {
         });
     }
 });
-
+// Delete course with authentication
 router.delete('/:id', authenticateUser, (req, res, next) => {
     const input = req.body;
 
