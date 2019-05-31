@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models').User;
 const authenticateUser = require('./authenticate');
 const bcryptjs = require('bcryptjs');
-
+// Get user with authentication
 router.get('/', authenticateUser, (req, res) => {
     res.json({
         id: req.currentUser.id,
@@ -13,7 +13,7 @@ router.get('/', authenticateUser, (req, res) => {
     });
     res.status(200);
 });
-
+// Create new user and hash password
 router.post('/', (req, res, next) => {
     const user = req.body;
 
